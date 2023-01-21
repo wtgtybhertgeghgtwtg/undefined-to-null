@@ -32,9 +32,9 @@
     "node": ">=16"
   },
   "exports": {
-    "type": "./source/undefined-to-null.ts",
-    "import": "./build/undefined-to-null.js",
-    "require": "./build/undefined-to-null.cjs"
+    "type": "./source/index.ts",
+    "import": "./build/index.js",
+    "require": "./build/index.cjs"
   },
   "files": [
     "build",

@@ -1,7 +1,8 @@
 {
   "compilerOptions": {
     "allowJs": false,
-    "checkJs": false
+    "checkJs": false,
+    "noEmit": true
   },
   "extends": "@tsconfig/node16-strictest-esm/tsconfig.json"
 }
