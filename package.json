@@ -45,6 +45,8 @@
     "undefined"
   ],
   "license": "MIT",
+  "main": "./build/index.cjs",
+  "module": "./build/index.js",
   "name": "undefined-to-null",
   "repository": "wtgtybhertgeghgtwtg/undefined-to-null",
   "scripts": {
@@ -62,5 +64,6 @@
   },
   "sideEffects": false,
   "type": "module",
+  "types": "./source/index.ts",
   "version": "0.0.0-semantic-release"
 }
