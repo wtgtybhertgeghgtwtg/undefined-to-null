@@ -123,4 +123,97 @@ describe('undefinedToNull', () => {
     expect(output.whateverComesAfterBat).toEqual(input.whateverComesAfterBat);
     expect(output.whateverComesAfterThat).toBeNull();
   });
+
+  it('works with arrays.', () => {
+    const input = [undefined, 0, '', undefined, null];
+    const output = undefinedToNull(input);
+    expect(output[0]).toBeNull();
+    expect(output[1]).toEqual(input[1]);
+    expect(output[2]).toEqual(input[2]);
+    expect(output[3]).toBeNull();
+    expect(output[4]).toBeNull();
+  });
+
+  it('works with arrays recursively.', () => {
+    const input = [
+      undefined,
+      {
+        foo: 3,
+        bar: {
+          baz: 2,
+        },
+        bat: [
+          undefined,
+          {
+            whateverComesAfterBat: undefined,
+            whateverComesAfterThat: {runningOutOfNames: undefined},
+            haveToThinkOfMore: [
+              undefined,
+              0,
+              {
+                justPuttingWhateverComesToMind: [
+                  undefined,
+                  {},
+                  {atLeastICanRepeatThisOne: undefined},
+                  {atLeastICanRepeatThisOne: {butNotThisOne: undefined}},
+                ],
+              },
+            ],
+          },
+          null,
+        ],
+        theseAreMostlyTypeScriptChecks: [
+          {inCaseYouCouldNotTell: 4},
+          {inCaseYouCouldNotTell: undefined},
+          {inCaseYouCouldNotTell: 5},
+          {inCaseYouCouldNotTell: null},
+        ],
+        oneMore: undefined,
+      },
+    ] as const;
+
+    const output = undefinedToNull(input, true);
+    expect(output[0]).toBeNull();
+    expect(output[1].foo).toEqual(input[1].foo);
+    expect(output[1].bar).toEqual(input[1].bar);
+    expect(output[1].bat[0]).toBeNull();
+    expect(output[1].bat[1].whateverComesAfterBat).toBeNull();
+    expect(
+      output[1].bat[1].whateverComesAfterThat.runningOutOfNames,
+    ).toBeNull();
+    expect(output[1].bat[1].haveToThinkOfMore[0]).toBeNull();
+    expect(output[1].bat[1].haveToThinkOfMore[1]).toEqual(
+      input[1].bat[1].haveToThinkOfMore[1],
+    );
+    expect(
+      output[1].bat[1].haveToThinkOfMore[2].justPuttingWhateverComesToMind[0],
+    ).toBeNull();
+    expect(
+      output[1].bat[1].haveToThinkOfMore[2].justPuttingWhateverComesToMind[1],
+    ).toEqual(
+      input[1].bat[1].haveToThinkOfMore[2].justPuttingWhateverComesToMind[1],
+    );
+    expect(
+      output[1].bat[1].haveToThinkOfMore[2].justPuttingWhateverComesToMind[2]
+        .atLeastICanRepeatThisOne,
+    ).toBeNull();
+    expect(
+      output[1].bat[1].haveToThinkOfMore[2].justPuttingWhateverComesToMind[3]
+        .atLeastICanRepeatThisOne.butNotThisOne,
+    ).toBeNull();
+    expect(output[1].bat[2]).toEqual(input[1].bat[2]);
+    expect(output[1].theseAreMostlyTypeScriptChecks[0]).toEqual(
+      input[1].theseAreMostlyTypeScriptChecks[0],
+    );
+    expect(
+      output[1].theseAreMostlyTypeScriptChecks[1].inCaseYouCouldNotTell,
+    ).toBeNull();
+    expect(output[1].theseAreMostlyTypeScriptChecks[2]).toEqual(
+      input[1].theseAreMostlyTypeScriptChecks[2],
+    );
+    expect(output[1].theseAreMostlyTypeScriptChecks[3]).toEqual(
+      input[1].theseAreMostlyTypeScriptChecks[3],
+    );
+    expect(output[1].oneMore).toBeNull();
+  });
 });

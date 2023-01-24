@@ -1,3 +1,28 @@
+type TrimUndefined<Input, Recursive extends boolean> = undefined extends Input
+  ? Exclude<
+      Input extends object
+        ? {
+            [Key in keyof UndefinedToNull<Input, Recursive>]: UndefinedToNull<
+              Input,
+              Recursive
+            >[Key];
+          }
+        : Input,
+      undefined
+    > | null
+  : Input extends object
+  ? Recursive extends true
+    ? Input extends Array<infer Value>
+      ? TrimUndefined<Value, Recursive>[]
+      : {
+          [Key in keyof UndefinedToNull<Input, Recursive>]: UndefinedToNull<
+            Input,
+            Recursive
+          >[Key];
+        }
+    : Input
+  : Input;
+
 /**
  * A version of an object with its undefined properties converted to null.
  * @typeParam Input - The type of the input object.
@@ -7,13 +32,7 @@ export type UndefinedToNull<
   Input extends object,
   Recursive extends boolean = false,
 > = {
-  [key in keyof Input]: undefined extends Input[key]
-    ? Exclude<Input[key], undefined> | null
-    : Input[key] extends object
-    ? Recursive extends true
-      ? UndefinedToNull<Input, Recursive>
-      : Input
-    : Input[key];
+  [Key in keyof Input]: TrimUndefined<Input[Key], Recursive>;
 };
 
 /**
@@ -25,34 +44,12 @@ export type UndefinedToNull<
 function undefinedToNull<Input extends object>(
   input: Input,
   recursive?: boolean,
-): {
-  [key in keyof Input]: undefined extends Input[key]
-    ? Exclude<Input[key], undefined> | null
-    : Input[key];
-};
+): {[Key in keyof Input]: UndefinedToNull<Input, false>[Key]};
 
 function undefinedToNull<Input extends object>(
   input: Input,
   recursive: true,
-): {
-  [key in keyof Input]: undefined extends Input[key]
-    ? Exclude<Input[key], undefined> | null
-    : Input[key] extends object
-    ? {
-        [key1 in keyof Input[key]]: undefined extends Input[key][key1]
-          ? Exclude<Input[key][key1], undefined> | null
-          : Input[key][key1] extends object
-          ? {
-              [key2 in keyof Input[key][key1]]: undefined extends Input[key][key1][key2]
-                ? Exclude<Input[key][key1][key2], undefined> | null
-                : Input[key][key1][key2] extends object
-                ? UndefinedToNull<Input[key][key1][key2], true>
-                : Input[key][key1][key2];
-            }
-          : Input[key][key1];
-      }
-    : Input[key];
-};
+): {[Key in keyof Input]: UndefinedToNull<Input, true>[Key]};
 
 function undefinedToNull<Input extends object>(
   input: Input,
