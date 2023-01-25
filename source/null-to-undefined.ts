@@ -1,3 +1,5 @@
+import createInputMapper from './create-input-mapper.js';
+
 type TrimNull<Input, Recursive extends boolean> = null extends Input
   ?
       | Exclude<
@@ -37,6 +39,18 @@ export type NullToUndefined<
   [Key in keyof Input]: TrimNull<Input[Key], Recursive>;
 };
 
+const inputMapper = createInputMapper((input, recursive) => {
+  if (input === null) {
+    return undefined;
+  }
+
+  if (!recursive || typeof input !== 'object') {
+    return input;
+  }
+
+  return inputMapper(input, true);
+});
+
 /**
  * Convert the null properties of an object to undefined.
  *
@@ -61,16 +75,7 @@ function nullToUndefined<Input extends object>(
     throw new TypeError('"input" must be an object.');
   }
 
-  const entries = Object.entries(input).map(([key, value]) => [
-    key,
-    value === null
-      ? undefined
-      : recursive && typeof value === 'object'
-      ? nullToUndefined(value, true)
-      : value,
-  ]);
-
-  return Object.fromEntries(entries);
+  return inputMapper(input, recursive);
 }
 
 export default nullToUndefined;
