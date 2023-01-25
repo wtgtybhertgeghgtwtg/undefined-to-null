@@ -216,4 +216,13 @@ describe('undefinedToNull', () => {
     );
     expect(output[1].oneMore).toBeNull();
   });
+
+  it('works for arrays in an object (recursively).', () => {
+    const input = {foo: [{bar: 1}, {bar: 2}, {bar: undefined}]};
+    const output = undefinedToNull(input, true);
+    expect(output.foo.length).toBe(3);
+    expect(output.foo[0]?.bar).toEqual(input.foo[0]?.bar);
+    expect(output.foo[1]?.bar).toEqual(input.foo[1]?.bar);
+    expect(output.foo[2]?.bar).toBeNull();
+  });
 });
