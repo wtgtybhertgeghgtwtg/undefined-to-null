@@ -11,6 +11,7 @@ module.exports = {
       ...noCase(repository).split(' '),
       ...Object.keys(devDependencies).flatMap((key) => noCase(key).split(' ')),
       'automerge',
+      'pnpm',
       'typecheck',
     ]),
   ].sort(),
