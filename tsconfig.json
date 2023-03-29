@@ -1,27 +1,12 @@
 {
-  "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
     "allowJs": false,
-    "allowUnreachableCode": false,
-    "allowUnusedLabels": false,
     "checkJs": false,
-    "esModuleInterop": true,
-    "exactOptionalPropertyTypes": true,
-    "forceConsistentCasingInFileNames": true,
-    "lib": ["es2021"],
-    "module": "es2022",
-    "moduleResolution": "node16",
-    "noEmit": true,
-    "noFallthroughCasesInSwitch": true,
-    "noImplicitOverride": true,
-    "noImplicitReturns": true,
-    "noPropertyAccessFromIndexSignature": true,
-    "noUncheckedIndexedAccess": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "skipLibCheck": false,
-    "strict": true,
-    "target": "es2021",
-    "verbatimModuleSyntax": true
-  }
+    "noEmit": true
+  },
+  "extends": [
+    "@tsconfig/strictest/tsconfig.json",
+    "@tsconfig/node16/tsconfig.json",
+    "@tsconfig/esm/tsconfig.json"
+  ]
 }
